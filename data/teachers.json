@@ -1,0 +1,11 @@
+{
+  "teachers": [
+    {
+      "id": 1768034068188,
+      "login": "admin",
+      "password": "admin",
+      "active": true,
+      "lastLogin": "2026-01-11T10:49:19.535Z"
+    }
+  ]
+}
