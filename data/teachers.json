@@ -3,9 +3,16 @@
     {
       "id": 1768034068188,
       "login": "admin",
-      "password": "admin",
+      "password": "admin123456",
       "active": true,
       "lastLogin": "2026-01-11T10:49:19.535Z"
+    },
+    {
+      "id": 1768039999999,
+      "login":"Vahobov_A",
+      "password": "pedagog2026",
+      "active": true,
+      "lastLogin": ""
     }
   ]
 }
