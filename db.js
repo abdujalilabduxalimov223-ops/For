@@ -1,11 +1,17 @@
-const { Pool } = require('pg');
+const mongoose = require("mongoose");
 
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'informatika_db',
-  password: 'Jal1l2003.', // 🔴 pgAdmin’da kiradigan parol
-  port: 5432,
+mongoose.connect(
+  "mongodb+srv://admin:admin123456@cluster0.xplu66f.mongodb.net/informatika",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+)
+.then(() => {
+  console.log("MongoDB connected");
+})
+.catch(err => {
+  console.error("MongoDB error:", err);
 });
 
-module.exports = pool;
+module.exports = mongoose;
