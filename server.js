@@ -244,7 +244,28 @@ res.json(tests);
 });
 
 // ===================================================
-// 🗑 DELETE TESTS
+// 🗑 DELETE ONE TEST
+// ===================================================
+
+app.delete("/api/test/:id", async (req,res)=>{
+
+try{
+
+await Test.findByIdAndDelete(req.params.id);
+
+res.json({success:true});
+
+}catch(err){
+
+res.status(500).json({error:"O‘chirishda xato"});
+
+}
+
+});
+
+
+// ===================================================
+// 🗑 DELETE ALL TESTS BY CLASS
 // ===================================================
 
 app.delete("/api/tests/:type",async(req,res)=>{
@@ -254,7 +275,6 @@ await Test.deleteMany({classType:req.params.type});
 res.json({success:true});
 
 });
-
 // ===================================================
 // 📚 RESOURCES
 // ===================================================
