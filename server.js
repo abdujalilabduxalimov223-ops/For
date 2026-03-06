@@ -8,6 +8,8 @@ const mongoose = require("mongoose");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(cors());
+app.use(express.json());
 // ===================================================
 // 🔧 MIDDLEWARE
 // ===================================================
@@ -18,20 +20,16 @@ app.use(express.json());
 // ===================================================
 // 🍃 MONGODB CONNECTION
 // ===================================================
-const mongoose = require("mongoose");
+
 
 mongoose.connect(
-  "mongodb+srv://admin:admin123456@cluster0.xplu66f.mongodb.net/informatika",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
+"mongodb+srv://admin:admin123456@cluster0.xplu66f.mongodb.net/informatika"
 )
-.then(() => {
-  console.log("MongoDB connected");
+.then(()=>{
+console.log("MongoDB connected");
 })
-.catch(err => {
-  console.error("MongoDB error:", err);
+.catch(err=>{
+console.log(err);
 });
 // ===================================================
 // 📦 MONGODB MODELS
