@@ -1,81 +1,72 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
-
 const router = express.Router();
-const teachersPath = path.join(__dirname, "../data/teachers.json");
+const Teacher = require("../models/Teacher");
 
-function readTeachers() {
-  if (!fs.existsSync(teachersPath)) {
-    fs.writeFileSync(
-      teachersPath,
-      JSON.stringify({ teachers: [] }, null, 2)
-    );
-  }
-  return JSON.parse(fs.readFileSync(teachersPath, "utf-8"));
-}
-
-function writeTeachers(data) {
-  fs.writeFileSync(teachersPath, JSON.stringify(data, null, 2));
-}
 
 // ===== GET ALL TEACHERS =====
-router.get("/", (req, res) => {
-  res.json(readTeachers().teachers);
+router.get("/", async (req,res)=>{
+ const teachers = await Teacher.find();
+ res.json(teachers);
 });
+
 
 // ===== ADD TEACHER =====
-router.post("/", (req, res) => {
-  const { login, password } = req.body;
-  if (!login || !password) {
-    return res.status(400).json({ error: "Maʼlumot yetarli emas" });
-  }
+router.post("/", async (req,res)=>{
 
-  const data = readTeachers();
+ const {login,password} = req.body;
 
-  if (data.teachers.find(t => t.login === login)) {
-    return res.status(400).json({ error: "Login mavjud" });
-  }
+ if(!login || !password){
+  return res.status(400).json({error:"Ma'lumot yetarli emas"});
+ }
 
-  data.teachers.push({
-    id: Date.now(),
-    login,
-    password,
-    active: false,
-    lastLogin: null
-  });
+ const exists = await Teacher.findOne({login});
 
-  writeTeachers(data);
-  res.json({ success: true });
+ if(exists){
+  return res.status(400).json({error:"Login mavjud"});
+ }
+
+ const teacher = new Teacher({
+  login,
+  password,
+  active:false,
+  lastLogin:null
+ });
+
+ await teacher.save();
+
+ res.json({success:true});
+
 });
 
-// ===== RESET PASSWORD (MUHIM!) =====
-router.post("/reset/:id", (req, res) => {
-  const { password } = req.body;
-  const data = readTeachers();
 
-  const teacher = data.teachers.find(
-    t => t.id === Number(req.params.id)
-  );
+// ===== RESET PASSWORD =====
+router.post("/reset/:id", async (req,res)=>{
 
-  if (!teacher) {
-    return res.status(404).json({ error: "Topilmadi" });
-  }
+ const {password} = req.body;
 
-  teacher.password = password;
-  writeTeachers(data);
+ const teacher = await Teacher.findById(req.params.id);
 
-  res.json({ success: true });
+ if(!teacher){
+  return res.status(404).json({error:"Topilmadi"});
+ }
+
+ teacher.password = password;
+
+ await teacher.save();
+
+ res.json({success:true});
+
 });
+
 
 // ===== DELETE =====
-router.delete("/:id", (req, res) => {
-  const data = readTeachers();
-  data.teachers = data.teachers.filter(
-    t => t.id !== Number(req.params.id)
-  );
-  writeTeachers(data);
-  res.json({ success: true });
+router.delete("/:id", async (req,res)=>{
+
+ await Teacher.findByIdAndDelete(req.params.id);
+
+ res.json({success:true});
+
 });
+
 
 module.exports = router;
