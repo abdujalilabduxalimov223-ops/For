@@ -18,17 +18,21 @@ app.use(express.json());
 // ===================================================
 // 🍃 MONGODB CONNECTION
 // ===================================================
+const mongoose = require("mongoose");
 
 mongoose.connect(
-"mongodb+srv://admin:123456@cluster0.xplu66f.mongodb.net/informatika",
-{
-useNewUrlParser: true,
-useUnifiedTopology: true
-}
+  "mongodb+srv://admin:admin123456@cluster0.xplu66f.mongodb.net/informatika",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
 )
-.then(()=>console.log("MongoDB connected"))
-.catch(err=>console.log(err));
-
+.then(() => {
+  console.log("MongoDB connected");
+})
+.catch(err => {
+  console.error("MongoDB error:", err);
+});
 // ===================================================
 // 📦 MONGODB MODELS
 // ===================================================
@@ -299,8 +303,6 @@ id:teacher._id
 // 🚀 SERVER START
 // ===================================================
 
-app.listen(PORT,()=>{
-
-console.log("Server running on port "+PORT);
-
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
